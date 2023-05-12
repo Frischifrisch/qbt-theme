@@ -54,26 +54,26 @@ def main(arguments):
 
     print('Converting .ui to .py ...')
 
+    ext = '.py'
+
     for ui_file in glob.glob('*.ui'):
         # get name without extension
         filename = os.path.splitext(ui_file)[0]
         print(filename, '...')
-        ext = '.py'
-
         # creating names
-        py_file_pyqt5 = filename + '_pyqt5_ui' + ext
-        py_file_pyqt = filename + '_pyqt_ui' + ext
-        py_file_pyside = filename + '_pyside_ui' + ext
-        py_file_pyside2 = filename + '_pyside2_ui' + ext
-        py_file_qtpy = filename + '_ui' + ext
-        py_file_pyqtgraph = filename + '_pyqtgraph_ui' + ext
+        py_file_pyqt5 = f'{filename}_pyqt5_ui{ext}'
+        py_file_pyqt = f'{filename}_pyqt_ui{ext}'
+        py_file_pyside = f'{filename}_pyside_ui{ext}'
+        py_file_pyside2 = f'{filename}_pyside2_ui{ext}'
+        py_file_qtpy = f'{filename}_ui{ext}'
+        py_file_pyqtgraph = f'{filename}_pyqtgraph_ui{ext}'
 
         # calling external commands
         if args.create in ['pyqt', 'pyqtgraph', 'all']:
             try:
                 call(['pyuic4', '--import-from=qdarkstyle', ui_file, '-o', py_file_pyqt])
             except Exception as er:
-                print("You must install pyuic4 %s" % str(er))
+                print(f"You must install pyuic4 {str(er)}")
             else:
                 print("Compiling using pyuic4 ...")
 
@@ -81,7 +81,7 @@ def main(arguments):
             try:
                 call(['pyuic5', '--import-from=qdarkstyle', ui_file, '-o', py_file_pyqt5])
             except Exception as er:
-                print("You must install pyuic5 %s" % str(er))
+                print(f"You must install pyuic5 {str(er)}")
             else:
                 print("Compiling using pyuic5 ...")
 
@@ -89,7 +89,7 @@ def main(arguments):
             try:
                 call(['pyside-uic', '--import-from=qdarkstyle', ui_file, '-o', py_file_pyside])
             except Exception as er:
-                print("You must install pyside-uic %s" % str(er))
+                print(f"You must install pyside-uic {str(er)}")
             else:
                 print("Compiling using pyside-uic ...")
 
@@ -97,7 +97,7 @@ def main(arguments):
             try:
                 call(['pyside2-uic', '--import-from=qdarkstyle', ui_file, '-o', py_file_pyside2])
             except Exception as er:
-                print("You must install pyside2-uic %s" % str(er))
+                print(f"You must install pyside2-uic {str(er)}")
             else:
                 print("Compiling using pyside2-uic ...")
 

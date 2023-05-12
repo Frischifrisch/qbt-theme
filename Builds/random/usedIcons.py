@@ -27,4 +27,4 @@ for v in imap.values():
         print(iconPath)
         shutil.copy(src=iconPath, dst = newIconPath)
     else:
-        print('error no binding exists for {}'.format(v))
+        print(f'error no binding exists for {v}')

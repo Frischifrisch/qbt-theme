@@ -62,8 +62,9 @@ def get_main_window_app(qt_from='pyqt', no_dark=True):
     app.setStyleSheet(style)
     # create main window
     window = QMainWindow()
-    window.setWindowTitle("QDarkStyle v." + qdarkstyle.__version__ +
-                          " - TEST - Using " + qt_from)
+    window.setWindowTitle(
+        f"QDarkStyle v.{qdarkstyle.__version__} - TEST - Using {qt_from}"
+    )
     # auto quit after 2s when testing on travis-ci
     if "--test" in sys.argv:
         QTimer.singleShot(2000, app.exit)

@@ -52,10 +52,7 @@ def _dict_to_scss(data):
     """Create a scss variables string from a dict."""
     lines = []
     template = "${}: {};"
-    for key, value in data.items():
-        line = template.format(key, value)
-        lines.append(line)
-
+    lines.extend(template.format(key, value) for key, value in data.items())
     return '\n'.join(lines)
 
 
@@ -111,22 +108,18 @@ def create_qss(qss_filepath=QSS_FILEPATH, main_scss_filepath=MAIN_SCSS_FILEPATH,
                palette=DarkPalette):
     """Create variables files and run qtsass compilation."""
     _create_scss_variables(variables_scss_filepath, palette)
-    stylesheet = _create_qss(main_scss_filepath, qss_filepath)
-
-    return stylesheet
+    return _create_qss(main_scss_filepath, qss_filepath)
 
 
 def is_identifier(name):
     """Check that `name` string is a valid identifier in Python."""
-    if PY2:
-        is_not_keyword = name not in keyword.kwlist
-        pattern = re.compile(r'^[a-z_][a-z0-9_]*$', re.I)
-        matches_pattern = bool(pattern.match(name))
-        check = is_not_keyword and matches_pattern
-    else:
-        check = name.isidentifier()
+    if not PY2:
+        return name.isidentifier()
 
-    return check
+    is_not_keyword = name not in keyword.kwlist
+    pattern = re.compile(r'^[a-z_][a-z0-9_]*$', re.I)
+    matches_pattern = bool(pattern.match(name))
+    return is_not_keyword and matches_pattern
 
 
 def create_custom_qss(
@@ -192,7 +185,7 @@ def create_custom_qss(
     custom_palette.COLOR_SELECTION_NORMAL = color_selection_normal
     custom_palette.COLOR_SELECTION_DARK = color_selection_dark
     custom_palette.SIZE_BORDER_RADIUS = border_radius
-    custom_palette.PATH_RESOURCES = "'{}'".format(theme_root_path)
+    custom_palette.PATH_RESOURCES = f"'{theme_root_path}'"
 
     # Process images and save them to the custom platte rc folder
     create_images(rc_path=theme_rc_path, palette=custom_palette)
@@ -236,10 +229,8 @@ def create_custom_qss_from_palette(name, path, palette):
         'path': path,
         'border_radius': palette.SIZE_BORDER_RADIUS,
     }
-    kwargs.update(palette.color_palette())
-    stylesheet = create_custom_qss(**kwargs)
-
-    return stylesheet
+    kwargs |= palette.color_palette()
+    return create_custom_qss(**kwargs)
 
 
 def create_custom_qss_from_dict(name, path, palette_dict):
@@ -251,10 +242,8 @@ def create_custom_qss_from_dict(name, path, palette_dict):
         'path': path,
         'border_radius': palette_dict.get('SIZE_BORDER_RADIUS', '4px'),
     }
-    kwargs.update(palette_dict)
-    stylesheet = create_custom_qss(**kwargs)
-
-    return stylesheet
+    kwargs |= palette_dict
+    return create_custom_qss(**kwargs)
 
 
 if __name__ == '__main__':

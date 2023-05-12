@@ -108,25 +108,25 @@ def run_process(args):
     print('Converting .qrc to _rc.py and/or .rcc ...')
     os.chdir(args.qrc_dir)
 
+    ext = '_rc.py'
+    ext_c = '.rcc'
+
     for qrc_file in glob.glob('*.qrc'):
         # get name without extension
         filename = os.path.splitext(qrc_file)[0]
 
         print(filename, '...')
-        ext = '_rc.py'
-        ext_c = '.rcc'
-
         # Create variables SCSS files and compile SCSS files to QSS
         print('Compiling SCSS/SASS files to QSS ...')
         create_qss()
 
         # creating names
-        py_file_pyqt5 = 'pyqt5_' + filename + ext
-        py_file_pyqt = 'pyqt_' + filename + ext
-        py_file_pyside = 'pyside_' + filename + ext
-        py_file_pyside2 = 'pyside2_' + filename + ext
-        py_file_qtpy = '' + filename + ext
-        py_file_pyqtgraph = 'pyqtgraph_' + filename + ext
+        py_file_pyqt5 = f'pyqt5_{filename}{ext}'
+        py_file_pyqt = f'pyqt_{filename}{ext}'
+        py_file_pyside = f'pyside_{filename}{ext}'
+        py_file_pyside2 = f'pyside2_{filename}{ext}'
+        py_file_qtpy = f'{filename}{ext}'
+        py_file_pyqtgraph = f'pyqtgraph_{filename}{ext}'
 
         # calling external commands
         if args.create in ['pyqt', 'pyqtgraph', 'all']:

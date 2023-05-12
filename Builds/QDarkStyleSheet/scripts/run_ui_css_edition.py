@@ -25,11 +25,11 @@ def main():
             try:
                 theme_process.kill()
             except AttributeError:
-                print(theme_name + ' not running!')
+                print(f'{theme_name} not running!')
             except Exception:
-                print(theme_name + ' still running!')
+                print(f'{theme_name} still running!')
             else:
-                print(theme_name + ' was killed!')
+                print(f'{theme_name} was killed!')
 
         print(sys.argv)
 

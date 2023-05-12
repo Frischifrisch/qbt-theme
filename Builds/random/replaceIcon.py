@@ -7,7 +7,7 @@ import json
 iconDir = '.\material-white\\icons\\' 
 
 jsons = str()
-with open(iconDir + 'iconconfig.json' , 'r') as f:
+with open(f'{iconDir}iconconfig.json', 'r') as f:
     jsons = f.read()
 
 imap = json.loads(jsons)
@@ -20,14 +20,14 @@ for dirpath, dirnames, files in os.walk(iconDir):
         fullfileName =  os.path.join(dirpath, f)
         print(fullfileName)
         subprocess.run(['C:\Program Files (x86)\Google\Chrome\Application\chrome.exe', fullfileName])
-        usedIn = list()
+        usedIn = []
         for k,v in imap.items():
             if  os.path.splitext(os.path.split(v)[1])[0] == os.path.splitext(os.path.split(f)[1])[0]:
                 print(k)
-        
+
         replacement = input('Replacement -> ')
         replacement = replacement.strip("\"")
         if len(replacement) > 0:
             replacementDest = dirpath + os.sep + os.path.splitext(f)[0] + os.path.splitext(replacement)[1]
-            os.system('del {}'.format(fullfileName))
-            os.system('move "{}" "{}"'.format(replacement, replacementDest))
+            os.system(f'del {fullfileName}')
+            os.system(f'move "{replacement}" "{replacementDest}"')

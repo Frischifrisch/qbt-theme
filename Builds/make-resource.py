@@ -8,7 +8,7 @@ import re
 
 def allFiles(glob):
     [dir, pattern] = os.path.split(glob)
-    l = list()
+    l = []
     for root, subdir, files in os.walk(dir):
         l.extend([os.path.join(root, x) for x in files if fnmatch.fnmatch(x, pattern)])
     return l
@@ -30,17 +30,15 @@ if not args.output.endswith('.qbtheme'):
     args.output += '.qbtheme'
 
 if os.path.exists(args.output):
-    print("WARNING! %s already exists. overwriting" % (args.output))
-    
+    print(f"WARNING! {args.output} already exists. overwriting")
+        
 
 files = allFiles(os.path.join(args.baseDir, '*'))
 if args.findFiles:
     print('finding files')
     args.files = []
     stylesheet = open(os.path.join(args.baseDir, args.style)).read()
-    for f in re.findall(':\/uitheme\/(.*)\)', stylesheet):
-        args.files.append(f)
-    
+    args.files.extend(iter(re.findall(':\/uitheme\/(.*)\)', stylesheet)))
 config_file = None
 if args.config:
     if os.path.exists(args.config):
@@ -48,16 +46,20 @@ if args.config:
     elif os.path.exists(os.path.join(args.baseDir, args.config)):
         config_file = os.path.join(args.baseDir, args.config)
 
-ResourceFiles = list()
+ResourceFiles = []
 for f in files:
     alias = os.path.relpath(f, args.baseDir)
     for i in args.files:
         if fnmatch.fnmatch(alias, i):
             ResourceFiles.append((alias, f))
-            print('adding ' + f)
+            print(f'adding {f}')
             break
-            
-IconFiles = list() if not args.iconsDir else [f for f in glob.glob(os.path.join(args.iconsDir, '*'))]
+
+IconFiles = (
+    []
+    if not args.iconsDir
+    else list(glob.glob(os.path.join(args.iconsDir, '*')))
+)
 print(IconFiles)
 
 with open('resources.qrc', 'w') as rcc:
