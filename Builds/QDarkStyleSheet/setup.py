@@ -31,7 +31,7 @@ def remove_all(dir_path, patterns='*.pyc'):
     """
 
     for pattern in patterns:
-        for filename in glob.iglob(dir_path + '/**/' + pattern, recursive=True):
+        for filename in glob.iglob(f'{dir_path}/**/{pattern}', recursive=True):
             os.remove(filename)
 
 

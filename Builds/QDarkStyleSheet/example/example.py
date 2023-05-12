@@ -38,6 +38,7 @@ Note:
 
 """
 
+
 # Standard library imports
 
 import argparse
@@ -48,8 +49,12 @@ import platform
 import time
 
 # Make the example runnable without the need to install and include ui
-sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + '/..'))
-sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + '/ui'))
+sys.path.insert(
+    0, os.path.abspath(f'{os.path.dirname(os.path.abspath(__file__))}/..')
+)
+sys.path.insert(
+    0, os.path.abspath(f'{os.path.dirname(os.path.abspath(__file__))}/ui')
+)
 
 # Must be in this place, after setting path, to not need to install
 import qdarkstyle  # noqa: E402
@@ -133,11 +138,7 @@ def main():
     app.setOrganizationName('QDarkStyle')
     app.setApplicationName('QDarkStyle Example')
 
-    style = ''
-
-    if not args.no_dark:
-        style = qdarkstyle.load_stylesheet()
-
+    style = qdarkstyle.load_stylesheet() if not args.no_dark else ''
     app.setStyleSheet(style)
 
     # create main window
@@ -240,7 +241,7 @@ def main():
     qstatusbar.addWidget(QPushButton('OK'))
 
     # Add info also in status bar for screenshots get it
-    qstatusbar.addWidget(QLabel('INFO: ' + title))
+    qstatusbar.addWidget(QLabel(f'INFO: {title}'))
     window.setStatusBar(qstatusbar)
 
     # Todo: add report info and other info in HELP graphical
@@ -296,7 +297,7 @@ def create_screenshots(app, window, no_dark):
     from qtpy.QtWidgets import QDockWidget, QTabWidget
 
     theme = 'no_dark' if no_dark else 'dark'
-    print('\nCreating {} screenshots'.format(theme))
+    print(f'\nCreating {theme} screenshots')
 
     docks = window.findChildren(QDockWidget)
     tabs = window.findChildren(QTabWidget)
@@ -327,7 +328,7 @@ def create_screenshots(app, window, no_dark):
     QCoreApplication.processEvents()
 
     for fname_suffix, dw_titles in widget_data.items():
-        png_path = os.path.join(SCREENSHOTS_PATH, theme + '_' + fname_suffix)
+        png_path = os.path.join(SCREENSHOTS_PATH, f'{theme}_{fname_suffix}')
         print('\t' + png_path)
 
         for dw in docks:

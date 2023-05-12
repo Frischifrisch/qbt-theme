@@ -12,7 +12,7 @@ import helpdev
 # Local imports
 import qdarkstyle
 
-sys.path.insert(0, abspath(dirname(abspath(__file__)) + '/..'))
+sys.path.insert(0, abspath(f'{dirname(abspath(__file__))}/..'))
 
 
 def main():
@@ -31,19 +31,23 @@ def main():
     parser.add_argument('--all', action='store_true',
                         help="Show all information options at once")
 
-    parser.add_argument('--version', '-v', action='version',
-                        version='v{}'.format(qdarkstyle.__version__))
+    parser.add_argument(
+        '--version',
+        '-v',
+        action='version',
+        version=f'v{qdarkstyle.__version__}',
+    )
 
     # parsing arguments from command line
     args = parser.parse_args()
-    no_args = not len(sys.argv) > 1
+    no_args = len(sys.argv) <= 1
     info = {}
 
     if no_args:
         parser.print_help()
 
     if args.information or args.all:
-        info.update(helpdev.check_os())
+        info |= helpdev.check_os()
         info.update(helpdev.check_python())
 
     if args.bindings or args.all:

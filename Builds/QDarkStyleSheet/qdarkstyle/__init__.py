@@ -217,9 +217,9 @@ def _load_stylesheet(qt_api=''):
 
     # Thus, by importing the binary we can access the resources
     package_dir = os.path.basename(PACKAGE_PATH)
-    qss_rc_path = ":" + os.path.join(package_dir, QSS_FILE)
+    qss_rc_path = f":{os.path.join(package_dir, QSS_FILE)}"
 
-    _logger.debug("Reading QSS file in: %s" % qss_rc_path)
+    _logger.debug(f"Reading QSS file in: {qss_rc_path}")
 
     # It gets the qss file from compiled style_rc that was import
     # not from the file QSS as we are using resources
@@ -233,8 +233,9 @@ def _load_stylesheet(qt_api=''):
     else:
         stylesheet = ""
         # Todo: check this raise type and add to docs
-        raise FileNotFoundError("Unable to find QSS file '{}' "
-                                "in resources.".format(qss_rc_path))
+        raise FileNotFoundError(
+            f"Unable to find QSS file '{qss_rc_path}' in resources."
+        )
 
     _logger.debug("Checking patches for being applied.")
 
@@ -295,11 +296,8 @@ def load_stylesheet(*args, **kwargs):
     if not kwargs and not args:
         stylesheet = _load_stylesheet(qt_api='pyqt5')
 
-    # Old API arguments
     elif 'pyside' in kwargs or isinstance(arg, bool):
-        pyside = kwargs.get('pyside', arg)
-
-        if pyside:
+        if pyside := kwargs.get('pyside', arg):
             stylesheet = _load_stylesheet(qt_api='pyside2')
             if not stylesheet:
                 stylesheet = _load_stylesheet(qt_api='pyside')
@@ -312,12 +310,10 @@ def load_stylesheet(*args, **kwargs):
         # Deprecation warning only for old API
         warnings.warn(DEPRECATION_MSG, DeprecationWarning)
 
-    # New API arguments
     elif 'qt_api' in kwargs or isinstance(arg, str):
         qt_api = kwargs.get('qt_api', arg)
         stylesheet = _load_stylesheet(qt_api=qt_api)
 
-    # Wrong API arguments name or type
     else:
         raise TypeError("load_stylesheet() takes only zero or one argument: "
                         "(new) string type qt_api='pyqt5' or "
@@ -384,12 +380,11 @@ def load_stylesheet_from_environment(is_pyqtgraph=False):
     """
     warnings.warn(DEPRECATION_MSG, DeprecationWarning)
 
-    if is_pyqtgraph:
-        stylesheet = _load_stylesheet(qt_api=os.environ('PYQTGRAPH_QT_LIB'))
-    else:
-        stylesheet = _load_stylesheet()
-
-    return stylesheet
+    return (
+        _load_stylesheet(qt_api=os.environ('PYQTGRAPH_QT_LIB'))
+        if is_pyqtgraph
+        else _load_stylesheet()
+    )
 
 
 # Deprecated ----------------------------------------------------------------
